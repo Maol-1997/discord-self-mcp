@@ -255,7 +255,3 @@ Contributions are welcome! Please:
 3. Commit your changes (`git commit -am 'feat: add new functionality'`)
 4. Push to the branch (`git push origin feature/new-functionality`)
 5. Open a Pull Request
-
-## License
-
-[Include license information here]
