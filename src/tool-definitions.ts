@@ -49,7 +49,8 @@ export const toolDefinitions = [
   },
   {
     name: 'search_messages',
-    description: 'Search for messages in a Discord channel by content, author, or date range',
+    description:
+      'Search for messages in a Discord channel by content, author, or date range',
     inputSchema: {
       type: 'object',
       properties: {
@@ -67,7 +68,8 @@ export const toolDefinitions = [
         },
         limit: {
           type: 'number',
-          description: 'Number of messages to search through (default: 100, max: 500)',
+          description:
+            'Number of messages to search through (default: 100, max: 500)',
           default: 100,
         },
         before: {
@@ -128,4 +130,4 @@ export const toolDefinitions = [
       required: ['channelId', 'content'],
     },
   },
-]; 
+]

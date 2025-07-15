@@ -1,30 +1,33 @@
-import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
-import type { Channel, TextChannel, Message } from 'discord.js-selfbot-v13';
-import type { 
-  DiscordClient, 
-  MessageData, 
-  ReadChannelArgs, 
-  SearchMessagesArgs, 
+import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js'
+import type { Channel, TextChannel, Message } from 'discord.js-selfbot-v13'
+import type {
+  DiscordClient,
+  MessageData,
+  ReadChannelArgs,
+  SearchMessagesArgs,
   SendMessageArgs,
   FetchMessagesOptions,
-  SendMessageOptions
-} from './types.js';
-import { getRelativeTime, createMCPResponse } from './utils.js';
+  SendMessageOptions,
+} from './types.js'
+import { getRelativeTime, createMCPResponse } from './utils.js'
 
-export async function readChannel(client: DiscordClient, args: ReadChannelArgs) {
-  const { channelId, limit = 50 } = args;
-  const maxLimit = Math.min(limit, 100);
+export async function readChannel(
+  client: DiscordClient,
+  args: ReadChannelArgs,
+) {
+  const { channelId, limit = 50 } = args
+  const maxLimit = Math.min(limit, 100)
 
   try {
-    const channel = await client.channels.fetch(channelId) as Channel;
-    
+    const channel = (await client.channels.fetch(channelId)) as Channel
+
     if (!channel || !channel.isText()) {
-      throw new Error('Channel not found or not a text channel');
+      throw new Error('Channel not found or not a text channel')
     }
 
-    const textChannel = channel as TextChannel;
-    const messages = await textChannel.messages.fetch({ limit: maxLimit });
-    
+    const textChannel = channel as TextChannel
+    const messages = await textChannel.messages.fetch({ limit: maxLimit })
+
     const messageData: MessageData[] = Array.from(messages.values())
       .map((msg: Message) => ({
         id: msg.id,
@@ -48,7 +51,7 @@ export async function readChannel(client: DiscordClient, args: ReadChannelArgs) 
           fields: embed.fields || [],
         })),
       }))
-      .reverse();
+      .reverse()
 
     return createMCPResponse({
       channel: {
@@ -57,41 +60,44 @@ export async function readChannel(client: DiscordClient, args: ReadChannelArgs) 
         type: channel.type,
       },
       messages: messageData,
-    });
+    })
   } catch (error) {
     throw new McpError(
       ErrorCode.InternalError,
-      `Failed to read channel: ${error}`
-    );
+      `Failed to read channel: ${error}`,
+    )
   }
 }
 
-export async function searchMessages(client: DiscordClient, args: SearchMessagesArgs) {
-  const { channelId, query, authorId, limit = 100, before, after } = args;
-  const maxLimit = Math.min(limit, 500);
+export async function searchMessages(
+  client: DiscordClient,
+  args: SearchMessagesArgs,
+) {
+  const { channelId, query, authorId, limit = 100, before, after } = args
+  const maxLimit = Math.min(limit, 500)
 
   try {
-    const channel = await client.channels.fetch(channelId) as Channel;
-    
+    const channel = (await client.channels.fetch(channelId)) as Channel
+
     if (!channel || !channel.isText()) {
-      throw new Error('Channel not found or not a text channel');
+      throw new Error('Channel not found or not a text channel')
     }
 
-    const textChannel = channel as TextChannel;
-    const fetchOptions: FetchMessagesOptions = { limit: maxLimit };
-    if (before) fetchOptions.before = before;
-    if (after) fetchOptions.after = after;
+    const textChannel = channel as TextChannel
+    const fetchOptions: FetchMessagesOptions = { limit: maxLimit }
+    if (before) fetchOptions.before = before
+    if (after) fetchOptions.after = after
 
-    let messages = await textChannel.messages.fetch(fetchOptions);
-    
+    let messages = await textChannel.messages.fetch(fetchOptions)
+
     if (authorId) {
-      messages = messages.filter((msg) => msg.author.id === authorId);
+      messages = messages.filter((msg) => msg.author.id === authorId)
     }
 
     if (query) {
-      messages = messages.filter((msg) => 
-        msg.content.toLowerCase().includes(query.toLowerCase())
-      );
+      messages = messages.filter((msg) =>
+        msg.content.toLowerCase().includes(query.toLowerCase()),
+      )
     }
 
     const messageData: MessageData[] = Array.from(messages.values())
@@ -117,7 +123,7 @@ export async function searchMessages(client: DiscordClient, args: SearchMessages
           fields: embed.fields || [],
         })),
       }))
-      .reverse();
+      .reverse()
 
     return createMCPResponse({
       channel: {
@@ -129,37 +135,42 @@ export async function searchMessages(client: DiscordClient, args: SearchMessages
       authorFilter: authorId,
       totalResults: messageData.length,
       messages: messageData,
-    });
+    })
   } catch (error) {
     throw new McpError(
       ErrorCode.InternalError,
-      `Failed to search messages: ${error}`
-    );
+      `Failed to search messages: ${error}`,
+    )
   }
 }
 
-export async function sendMessage(client: DiscordClient, args: SendMessageArgs) {
-  const { channelId, content, replyToMessageId } = args;
+export async function sendMessage(
+  client: DiscordClient,
+  args: SendMessageArgs,
+) {
+  const { channelId, content, replyToMessageId } = args
 
   try {
-    const channel = await client.channels.fetch(channelId) as Channel;
-    
+    const channel = (await client.channels.fetch(channelId)) as Channel
+
     if (!channel || !channel.isText()) {
-      throw new Error('Channel not found or cannot send messages to this channel');
+      throw new Error(
+        'Channel not found or cannot send messages to this channel',
+      )
     }
 
-    const textChannel = channel as TextChannel;
-    let sentMessage: Message;
+    const textChannel = channel as TextChannel
+    let sentMessage: Message
 
     if (replyToMessageId) {
-      const replyMessage = await textChannel.messages.fetch(replyToMessageId);
+      const replyMessage = await textChannel.messages.fetch(replyToMessageId)
       if (!replyMessage) {
-        throw new Error('Reply message not found');
+        throw new Error('Reply message not found')
       }
-      
-      sentMessage = await replyMessage.reply(content);
+
+      sentMessage = await replyMessage.reply(content)
     } else {
-      sentMessage = await textChannel.send(content);
+      sentMessage = await textChannel.send(content)
     }
 
     return createMCPResponse({
@@ -168,12 +179,12 @@ export async function sendMessage(client: DiscordClient, args: SendMessageArgs) 
       channelId: channelId,
       content: content,
       timestamp: sentMessage.createdTimestamp,
-      replyTo: replyToMessageId || null
-    });
+      replyTo: replyToMessageId || null,
+    })
   } catch (error) {
     throw new McpError(
       ErrorCode.InternalError,
-      `Failed to send message: ${error}`
-    );
+      `Failed to send message: ${error}`,
+    )
   }
-} 
+}
