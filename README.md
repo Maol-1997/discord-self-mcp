@@ -63,7 +63,40 @@ npm run build
 
 The Discord token is passed as an environment variable from your MCP client. **DO NOT** use local .env files.
 
-To get your Discord token:
+### How to get your Discord token:
+
+#### Method 1: Using Console Script (Recommended)
+1. Open Discord in your browser
+2. Press F12 to open developer tools
+3. Go to the "Console" tab
+4. Paste the following code and press Enter:
+
+```javascript
+window.webpackChunkdiscord_app.push([
+	[Symbol()],
+	{},
+	req => {
+		if (!req.c) return;
+		for (let m of Object.values(req.c)) {
+			try {
+				if (!m.exports || m.exports === window) continue;
+				if (m.exports?.getToken) return copy(m.exports.getToken());
+				for (let ex in m.exports) {
+					if (m.exports?.[ex]?.getToken && m.exports[ex][Symbol.toStringTag] !== 'IntlMessagesProxy') return copy(m.exports[ex].getToken());
+				}
+			} catch {}
+		}
+	},
+]);
+
+window.webpackChunkdiscord_app.pop();
+console.log('%cWorked!', 'font-size: 50px');
+console.log(`%cYou now have your token in the clipboard!`, 'font-size: 16px');
+```
+
+5. Your token will be automatically copied to the clipboard
+
+#### Method 2: Manual Network Inspection
 1. Open Discord in your browser
 2. Press F12 to open developer tools
 3. Go to the "Network" tab
