@@ -14,15 +14,15 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": ["mcp", "discord", "selfbot", "model-context-protocol", "claude"],
-  "author": "Tu Nombre <tu.email@ejemplo.com>",
+  "author": "Martin Ortiz <maol@mail.maol.dev>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tu-usuario/discord-self-mcp.git"
+    "url": "git+https://github.com/Maol-1997/discord-self-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/tu-usuario/discord-self-mcp/issues"
+    "url": "https://github.com/Maol-1997/discord-self-mcp/issues"
   },
-  "homepage": "https://github.com/tu-usuario/discord-self-mcp#readme",
+  "homepage": "https://github.com/Maol-1997/discord-self-mcp#readme",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.5.0",
