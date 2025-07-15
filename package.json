@@ -1,6 +1,6 @@
 {
   "name": "discord-self-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "description": "MCP server for Discord using selfbot to read channels",
   "main": "dist/index.js",
