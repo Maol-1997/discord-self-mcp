@@ -106,8 +106,7 @@ export interface ReadChannelArgs {
 }
 
 export interface SearchMessagesArgs {
-  channelId?: string
-  guildId?: string
+  channelId: string
   query?: string
   authorId?: string
   limit?: number

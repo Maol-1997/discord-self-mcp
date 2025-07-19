@@ -137,7 +137,9 @@ class DiscordMCPServer {
         case 'search_messages':
           return await searchMessages(
             this.client,
-            validateAndCastArgs<SearchMessagesArgs>(request.params.arguments, []),
+            validateAndCastArgs<SearchMessagesArgs>(request.params.arguments, [
+              'channelId',
+            ]),
           )
         case 'send_message':
           return await sendMessage(
