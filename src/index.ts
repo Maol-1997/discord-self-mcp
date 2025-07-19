@@ -19,6 +19,7 @@ import type {
   SendMessageArgs,
   ListChannelsArgs,
   ListGuildMembersArgs,
+  MCPResponse,
 } from './types.js'
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN
@@ -113,7 +114,7 @@ class DiscordMCPServer {
       tools: toolDefinitions,
     }))
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request): Promise<any> => {
       if (!this.isReady) {
         try {
           await this.readyPromise
@@ -127,21 +128,19 @@ class DiscordMCPServer {
 
       switch (request.params.name) {
         case 'read_channel':
-          return readChannel(
+          return await readChannel(
             this.client,
             validateAndCastArgs<ReadChannelArgs>(request.params.arguments, [
               'channelId',
             ]),
           )
         case 'search_messages':
-          return searchMessages(
+          return await searchMessages(
             this.client,
-            validateAndCastArgs<SearchMessagesArgs>(request.params.arguments, [
-              'channelId',
-            ]),
+            validateAndCastArgs<SearchMessagesArgs>(request.params.arguments, []),
           )
         case 'send_message':
-          return sendMessage(
+          return await sendMessage(
             this.client,
             validateAndCastArgs<SendMessageArgs>(request.params.arguments, [
               'channelId',
@@ -149,16 +148,16 @@ class DiscordMCPServer {
             ]),
           )
         case 'list_channels':
-          return listChannels(
+          return await listChannels(
             this.client,
             validateAndCastArgs<ListChannelsArgs>(request.params.arguments, []),
           )
         case 'list_guilds':
-          return listGuilds(this.client)
+          return await listGuilds(this.client)
         case 'get_user_info':
-          return getUserInfo(this.client)
+          return await getUserInfo(this.client)
         case 'list_guild_members':
-          return listGuildMembers(
+          return await listGuildMembers(
             this.client,
             validateAndCastArgs<ListGuildMembersArgs>(
               request.params.arguments,

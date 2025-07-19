@@ -1,3 +1,5 @@
+import type { MCPResponse } from './types.js'
+
 export function getRelativeTime(timestamp: number): string {
   const now = Date.now()
   const diff = now - timestamp
@@ -45,7 +47,7 @@ export function getChannelTypeDescription(type: number | string): string {
   return types[String(type)] || `Unknown (${type})`
 }
 
-export function createMCPResponse(data: Record<string, any>) {
+export function createMCPResponse(data: Record<string, any>): MCPResponse {
   return {
     content: [
       {
