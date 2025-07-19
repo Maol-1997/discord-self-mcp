@@ -14,6 +14,8 @@ export interface MessageData {
   relativeTime: string
   attachments: AttachmentData[]
   embeds: EmbedData[]
+  channelId?: string
+  channelName?: string
 }
 
 export interface AttachmentData {
@@ -104,7 +106,8 @@ export interface ReadChannelArgs {
 }
 
 export interface SearchMessagesArgs {
-  channelId: string
+  channelId?: string
+  guildId?: string
   query?: string
   authorId?: string
   limit?: number

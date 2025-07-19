@@ -124,16 +124,19 @@ Read messages from a Discord channel.
 
 #### `mcp_discord_search_messages`
 
-Search for messages in a Discord channel by content, author, or date range.
+Search for messages in a Discord channel or guild by content, author, or date range.
 
 **Parameters:**
 
-- `channelId` (string, required): The Discord channel ID to search messages in
+- `channelId` (string, optional): The Discord channel ID to search messages in (required if guildId not provided)
+- `guildId` (string, optional): The Discord guild ID to search messages across all channels (required if channelId not provided)
 - `query` (string, optional): Text to search for in message content
 - `authorId` (string, optional): Optional: Filter by author ID
 - `limit` (number, optional): Number of messages to search through (default: 100, max: 500)
 - `before` (string, optional): Optional: Search messages before this message ID
 - `after` (string, optional): Optional: Search messages after this message ID
+
+**Note:** Either `channelId` or `guildId` must be provided. When using `guildId`, the search will be performed across all text channels in the guild.
 
 #### `mcp_discord_send_message`
 
