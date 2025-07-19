@@ -176,11 +176,8 @@ class DiscordMCPServer {
   async run() {
     const transport = new StdioServerTransport()
     await this.server.connect(transport)
-    console.error('Discord MCP server running on stdio')
   }
 }
 
 const server = new DiscordMCPServer()
 server.run().catch(console.error)
-
-console.log('Discord MCP Server iniciado')
